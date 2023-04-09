@@ -1,0 +1,69 @@
+QPushButton
+{
+  border: 2px solid lightgray;
+  border-radius: 6;
+  font-size: 12px;
+}
+QPushButton:hover
+{
+  border: 2px solid LightCyan;
+  border-radius: 6;
+}
+QLineEdit
+{
+  border-style: solid;
+  border: 2px solid lightgray;
+  border-radius: 6;
+  background-color: lightgray;
+}
+QLineEdit:hover
+{
+  background-color: AliceBlue;
+}
+QTreeView
+{
+  border:  2px solid lightgray;
+  border-radius: 6;
+}
+QCheckBox::indicator:hover
+{
+    border: 1px solid LightCyan;
+    border-radius: 6px;
+}
+QTableView
+{
+    border: 2px solid lightgray;
+    gridline-color: #323232;
+    border-radius: 0px;
+}
+QMenu
+{
+    border: 1px solid #000;
+}
+QMenu::item
+{
+    padding: 2px 20px 2px 20px;
+}
+QMenu::item:selected
+{
+    border: 1px solid LightCyan;
+    background-color: #D1DBCB;
+    color: #000;
+}
+QMenuBar::item:selected
+{
+    /* background: transparent; */
+    border: 1px solid LightCyan;
+    background-color: #D1DBCB;
+    color: #000;
+    /* border: 1px solid #76797C; */
+}
+
+QMenuBar::item:pressed
+{
+    border: 1px solid LightCyan;
+    background-color: #D1DBCB;
+    color: #000;
+    margin-bottom:-1px;
+    padding-bottom:1px;
+}
