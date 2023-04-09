@@ -1,10 +1,18 @@
+import os
 import sys
+import logging
+import pwd
 import pandas as pd
 from PyQt5 import QtWidgets, uic, QtCore
 from PyQt5.QtWidgets import QAction, QMainWindow, QFileDialog
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt, QSettings
 from pathlib import Path
+
+
+logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
+start = f"CSV data viewer session for user: {pwd.getpwuid(os.getuid())[0]}"
+version = "1.0.0"
 
 
 class Datatable(QtCore.QAbstractTableModel):
@@ -37,14 +45,16 @@ class Datatable(QtCore.QAbstractTableModel):
 class Showcsv(QMainWindow):
     def __init__(self, parent=None):
         super(Showcsv, self).__init__(parent)
+        logging.info(start)
+        logging.info(f"CSV data viewer version - {version}")
         # Check if correct argument number provided
         if len(sys.argv) == 1:
             self.dataIn = None
         elif len(sys.argv) == 2:
             self.dataIn = self.is_csv_file(Path(sys.argv[1]))
         else:
-            print("Incorrect arguments provided - "
-                  "closing ui")
+            logging.error("Incorrect arguments provided - "
+                          "closing ui")
             sys.exit()
 
         # Load dialog ui
@@ -53,8 +63,8 @@ class Showcsv(QMainWindow):
         self.model = None
 
         self.settings = QSettings('r2d2DV', 'r2d2DV')
-        print(f"Session file: "
-              f"{QSettings.fileName(self.settings)}")
+        logging.info(f"Session file: "
+                     f"{QSettings.fileName(self.settings)}")
         # Re-establish personal settings
         self.restore_session()
         # Set button functions
@@ -73,10 +83,13 @@ class Showcsv(QMainWindow):
         preferences.
         """
         if self.settings.contains("theme_selection"):
-            with open(self.settings.
-                              value('theme_selection')) as file:
+            with open(self.settings.value
+                          ('theme_selection')) as file:
                 style = file.read()
             self.setStyleSheet(style)
+            logging.info(f"Restoring "
+                         f"{self.settings.value('theme_selection')} "
+                         f"display settings")
 
     def set_menu(self):
         # set up windows menubar
@@ -137,18 +150,19 @@ class Showcsv(QMainWindow):
         """
         This function is used to close the GUI.
         """
+        logging.info("Closing CSV data viewer session")
         self.close()
 
     def browse_gen(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
-        fileName, _ = QFileDialog.\
+        file_name, _ = QFileDialog.\
             getOpenFileName(self,
                             "Pick R2D2 data source",
                             "",
                             "CSV Files (*.csv)",
                             options=options)
-        self.dataIn = self.is_csv_file(Path(fileName))
+        self.dataIn = self.is_csv_file(Path(file_name))
         self.run()
 
     def default_sheet(self):
@@ -183,13 +197,13 @@ class Showcsv(QMainWindow):
         """
         if filepath.is_file():
             if filepath.suffix == '.csv':
-                print(f"Loading CSV file {filepath}")
+                logging.info(f"Loading CSV file {filepath}")
                 return filepath
             else:
-                print("File not required .csv format")
+                logging.error("File not required .csv format")
                 sys.exit()
         else:
-            print("No valid file provided")
+            logging.error("No valid file provided")
             sys.exit()
 
     @staticmethod
