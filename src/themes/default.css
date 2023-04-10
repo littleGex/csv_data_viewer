@@ -20,6 +20,10 @@ QLineEdit:hover
 {
   background-color: AliceBlue;
 }
+LineEdit:disabled
+{
+    color: #E9E1DF;
+}
 QTreeView
 {
   border:  2px solid lightgray;

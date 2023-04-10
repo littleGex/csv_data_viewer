@@ -8,11 +8,10 @@ from PyQt5.QtWidgets import QAction, QMainWindow, QFileDialog
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt, QSettings
 from pathlib import Path
+from definitions import ROOT_PATH, START, VERSION
 
 
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
-start = f"CSV data viewer session for user: {pwd.getpwuid(os.getuid())[0]}"
-version = "1.0.0"
 
 
 class Datatable(QtCore.QAbstractTableModel):
@@ -45,8 +44,8 @@ class Datatable(QtCore.QAbstractTableModel):
 class Showcsv(QMainWindow):
     def __init__(self, parent=None):
         super(Showcsv, self).__init__(parent)
-        logging.info(start)
-        logging.info(f"CSV data viewer version - {version}")
+        logging.info(START)
+        logging.info(f"CSV data viewer version - {VERSION}")
         # Check if correct argument number provided
         if len(sys.argv) == 1:
             self.dataIn = None
@@ -58,7 +57,7 @@ class Showcsv(QMainWindow):
             sys.exit()
 
         # Load dialog ui
-        uic.loadUi('../ui/main.ui', self)
+        uic.loadUi(os.path.join(ROOT_PATH, 'ui/main.ui'), self)
 
         self.model = None
 
@@ -166,25 +165,28 @@ class Showcsv(QMainWindow):
         self.run()
 
     def default_sheet(self):
-        with open('themes/default.css') as file:
+        css_file = os.path.join(ROOT_PATH, 'src/themes/default.css')
+        with open(css_file) as file:
             style = file.read()
         self.setStyleSheet(style)
         self.settings.setValue('theme_selection',
-                               'themes/default.css')
+                               css_file)
 
     def grey_sheet(self):
-        with open('themes/darkGrey.css') as file:
+        css_file = os.path.join(ROOT_PATH, 'src/themes/darkGrey.css')
+        with open(css_file) as file:
             style = file.read()
         self.setStyleSheet(style)
         self.settings.setValue('theme_selection',
-                               'themes/darkGrey.css')
+                               css_file)
 
     def orange_sheet(self):
-        with open('themes/darkOrange.css') as file:
+        css_file = os.path.join(ROOT_PATH, 'src/themes/darkOrange.css')
+        with open(css_file) as file:
             style = file.read()
         self.setStyleSheet(style)
         self.settings.setValue('theme_selection',
-                               'themes/darkOrange.css')
+                               css_file)
 
     @staticmethod
     def is_csv_file(filepath: Path):

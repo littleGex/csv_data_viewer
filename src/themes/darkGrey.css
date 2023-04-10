@@ -345,6 +345,10 @@ QLineEdit
     border-radius: 5px;
     color: #eff0f1;
 }
+QLineEdit:disabled
+{
+    color: #F8F8F8;
+}
 
 QGroupBox {
     border:1px solid #76797C;
